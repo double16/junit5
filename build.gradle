@@ -1,5 +1,4 @@
 import java.text.SimpleDateFormat
-import org.asciidoctor.gradle.AsciidoctorTask
 
 buildscript {
 	repositories {
@@ -86,7 +85,6 @@ allprojects { subproj ->
 	apply plugin: 'com.diffplug.gradle.spotless'
 	apply plugin: 'checkstyle'
 	apply plugin: 'com.github.ben-manes.versions' // gradle dependencyUpdates
-        apply plugin: 'org.aim42.htmlSanityCheck'
 	apply from: "$rootDir/gradle/degraph.gradle"
 
 	repositories {
@@ -103,16 +101,6 @@ allprojects { subproj ->
 		sourceCompatibility = rootProject.sourceCompatibility
 		targetCompatibility = rootProject.targetCompatibility
 	}
-
-	tasks.withType(AsciidoctorTask) { task ->
-		htmlSanityCheck {
-			dependsOn task
-			sourceDir = file("${task.project.buildDir}/asciidoc")
-			sourceDocuments = fileTree(dir: "${task.project.projectDir}/src/docs/asciidoc", include: '*.adoc').collect { it.name.replaceAll('\\.adoc$', '.html') }
-			checkingResultsDir = file("${project.buildDir}/reports/htmlchecks")
-			checkExternalLinks = true
-		}
-        }
 
 	// See: http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html#BHCJCABJ
 	compileJava.options*.compilerArgs = [
